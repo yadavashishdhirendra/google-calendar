@@ -8,7 +8,11 @@ const app = express();
 
 const PORT = 8000;
 
-app.use(cors())
+app.use(cors({
+  origin: 'http://localhost:3000', // Frontend origin
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Enable cookies
+}));
 
 // oAuth Secret
 export const oauth2Client = new google.auth.OAuth2(
