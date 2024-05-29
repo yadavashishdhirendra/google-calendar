@@ -1,38 +1,23 @@
 import dayjs from "dayjs";
 import { calendar, oauth2Client } from "../index.js";
 import { v4 as uuid } from "uuid";
-import { google } from "googleapis";
 
 // Create Events
 export const CreateEvents = async (req, res) => {
   try {
-    const accessToken = req.cookies.accessToken; // Retrieve access token from cookies
-    if (!accessToken) {
-      return res.status(401).json({
-        success: false,
-        message: "Access token not found in cookies",
-      });
-    }
+    const { title, description, startdateTime, endDateTime, attendees } = req.body
 
-    const oauth2Client = new google.auth.OAuth2();
-    oauth2Client.setCredentials({ access_token: accessToken });
-
-    const calendarClient = google.calendar({ version: 'v3', auth: oauth2Client });
-    
-    await calendarClient.events.insert({
+    await calendar.events.insert({
       calendarId: "primary",
       requestBody: {
-        summary: "This Is A Test Event",
-        description: "Created By Ashish - Node JS",
+        summary: title,
+        description: description,
         start: {
-          dateTime: dayjs(new Date()).add(1, "day").toISOString(),
+          dateTime: startdateTime,
           timeZone: "Asia/Kolkata",
         },
         end: {
-          dateTime: dayjs(new Date())
-            .add(1, "day")
-            .add(1, "hour")
-            .toISOString(),
+          dateTime: endDateTime,
           timeZone: "Asia/Kolkata",
         },
         conferenceData: {
@@ -40,16 +25,15 @@ export const CreateEvents = async (req, res) => {
             requestId: uuid(),
           },
         },
-        attendees: [
-          {
-            email: "ashish.yadav@menrocks.in",
-          },
-        ],
+        attendees: attendees,
         hangoutLink: "https://meet.google.com/zyu-ywhh-ckz",
       },
     });
 
-    return res.send("Event Created Successfully!");
+    return res.status(200).json({
+      success: true,
+      message: "Event Created Successfully!"
+    })
   } catch (error) {
     return res.status(500).json({
       success: false,
