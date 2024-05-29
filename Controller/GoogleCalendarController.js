@@ -15,9 +15,9 @@ export const googleAuth = async (req, res) => {
 
     res.redirect(url);
   } catch (error) {
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -39,8 +39,48 @@ export const redirectURI = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error,
+      message: error.message,
     });
   }
 };
 
+
+
+// Get User Info
+export const GetUserInfo = async (req, res) => {
+  const { token } = req.body
+  const url = 'https://www.googleapis.com/oauth2/v2/userinfo';
+  const headers = {
+    'Authorization': `Bearer ${token}`
+  };
+
+  try {
+    const response = await axios.get(url, { headers });
+    if (response.status === 200) {
+      return res.status(200).json({
+        success: true,
+        message: "User Retrieved Successfully",
+        data: response.data
+      });
+    } else {
+      console.error('Error fetching user details:', response.status);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching user details:', error.message);
+    return null;
+  }
+}
+
+// Logout User
+export const LogoutUser = async (req, res) => {
+  try {
+    req.session.destroy();
+    res.redirect(`'https://oauth-provider.com/logout?redirect_uri=http://localhost:3000/logout'`)
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
