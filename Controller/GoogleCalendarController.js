@@ -28,7 +28,9 @@ export const redirectURI = async (req, res) => {
     const code = req.query.code;
 
     const { tokens } = await oauth2Client.getToken(code);
-    oauth2Client.setCredentials(tokens);
+    oauth2Client.setCredentials({
+      access_token: tokens.access_token
+    });
 
     res.send({
       success: true,
