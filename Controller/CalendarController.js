@@ -48,9 +48,14 @@ export const CreateEvents = async (req, res) => {
 // Get All Events
 export const AllEvents = async (req, res) => {
   try {
+    const oauth2Clients = new google.auth.OAuth2(
+      process.env.CLIENT_ID,
+      process.env.CLIENT_SECRET,
+      process.env.REDIRECT_URL
+    );
     let events = await calendar.events.list({
       calendarId: "primary",
-      auth: oauth2Client,
+      auth: oauth2Clients,
     });
 
     res.send({ events: events?.data?.items });
