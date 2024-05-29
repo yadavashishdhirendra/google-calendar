@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import { calendar, oauth2Client } from "../index.js";
 import { v4 as uuid } from "uuid";
+import { google } from "googleapis";
 
 // Create Events
 export const CreateEvents = async (req, res) => {
