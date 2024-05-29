@@ -42,21 +42,3 @@ export const redirectURI = async (req, res) => {
     });
   }
 };
-
-export const logout = async (req, res) => {
-  try {
-    // Clear tokens from session
-    console.log(req.session.tokens);
-    req.session.tokens = null;
-
-    res.send({
-      success: true,
-      message: "You have successfully logged out.",
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error,
-    });
-  }
-};

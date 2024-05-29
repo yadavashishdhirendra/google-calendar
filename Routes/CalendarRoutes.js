@@ -9,14 +9,15 @@ import {
 
 const app = express.Router();
 
-// ROUTE - api/v1/calendar/create-events
+// ROUTE - /create-events
 app.get("/create-events", CreateEvents);
-// ROUTE - api/v1/calendar/events
+// ROUTE - /events
 app.get("/events", AllEvents);
-// ROUTE - api/v1/calendar/update-events/:id
+// ROUTE - /update-events/:id
 app.put("/update-events/:id", UpdateEventById);
-// ROUTE - api/v1/calendar/delete-events/:id
+// ROUTE - /delete-events/:id
 app.delete("/delete-event/:id", DeleteEventById);
+// ROUTE - /event/:id
 app.get("/event/:id", GetEventById);
 
 export default app;
