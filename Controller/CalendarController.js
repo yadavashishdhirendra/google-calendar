@@ -48,7 +48,7 @@ export const CreateEvents = async (req, res) => {
 
 // Get All Events
 export const AllEvents = async (req, res) => {
-  try {
+  // try {
     const oauth2Clients = new google.auth.OAuth2(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
@@ -60,12 +60,12 @@ export const AllEvents = async (req, res) => {
     });
 
     res.send({ events: events?.data?.items });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+  // } catch (error) {
+  //   return res.status(500).json({
+  //     success: false,
+  //     message: error.message,
+  //   });
+  // }
 };
 
 // Update The Events
