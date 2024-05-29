@@ -9,6 +9,6 @@ const app = express.Router();
 // ROUTE - /google
 app.get("/google", googleAuth);
 // ROUTE - /google/redirect
-app.get("/google/redirect", redirectURI);
+app.post("/google/redirect", redirectURI);
 
 export default app;
