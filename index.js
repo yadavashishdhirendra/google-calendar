@@ -6,6 +6,10 @@ dotenv.config();
 
 const app = express();
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+
 const PORT = 8000;
 
 app.use(cors({
@@ -30,6 +34,7 @@ export const calendar = google.calendar({
 // IMPORTING ROUTES
 import GoogleCalendarRoutes from "./Routes/GoogleCalendarRoutes.js";
 import CalendarRoutes from "./Routes/CalendarRoutes.js";
+import bodyParser from "body-parser";
 
 // using Routes
 app.use(GoogleCalendarRoutes);
