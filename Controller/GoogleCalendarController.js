@@ -1,4 +1,5 @@
 import { oauth2Client } from "../index.js";
+import axios from 'axios'
 
 // Login Using OAuth
 export const googleAuth = async (req, res) => {
@@ -47,8 +48,16 @@ export const redirectURI = async (req, res) => {
 
 
 // Get User Info
-export const GetUserInfo = async (req, res) => {
-  const { token } = req.body
+export const getUserInfo = async (req, res) => {
+  const { token } = req.body;
+
+  if (!token) {
+    return res.status(400).json({
+      success: false,
+      message: "Token is required",
+    });
+  }
+
   const url = 'https://www.googleapis.com/oauth2/v2/userinfo';
   const headers = {
     'Authorization': `Bearer ${token}`
@@ -56,6 +65,7 @@ export const GetUserInfo = async (req, res) => {
 
   try {
     const response = await axios.get(url, { headers });
+
     if (response.status === 200) {
       return res.status(200).json({
         success: true,
@@ -63,14 +73,18 @@ export const GetUserInfo = async (req, res) => {
         data: response.data
       });
     } else {
-      console.error('Error fetching user details:', response.status);
-      return null;
+      return res.status(400).json({
+        success: false,
+        message: response.statusText,
+      });
     }
   } catch (error) {
-    console.error('Error fetching user details:', error.message);
-    return null;
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
-}
+};
 
 // Logout User
 export const LogoutUser = async (req, res) => {
