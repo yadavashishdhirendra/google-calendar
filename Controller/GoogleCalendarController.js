@@ -3,19 +3,17 @@ import { oauth2Client } from "../index.js";
 // Login Using OAuth
 export const googleAuth = async (req, res) => {
   try {
-    const { code } = req.body
-    res.send(code)
-    // const scopes = [
-    //   "https://www.googleapis.com/auth/calendar",
-    //   "https://www.googleapis.com/auth/calendar.events",
-    // ];
+    const scopes = [
+      "https://www.googleapis.com/auth/calendar",
+      "https://www.googleapis.com/auth/calendar.events",
+    ];
 
-    // const url = oauth2Client.generateAuthUrl({
-    //   access_type: "offline",
-    //   scope: scopes,
-    // });
+    const url = oauth2Client.generateAuthUrl({
+      access_type: "offline",
+      scope: scopes,
+    });
 
-    // res.redirect(url);
+    res.redirect(url);
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -30,9 +28,7 @@ export const redirectURI = async (req, res) => {
     const code = req.query.code;
 
     const { tokens } = await oauth2Client.getToken(code);
-    oauth2Client.setCredentials({
-      access_token: tokens.access_token
-    });
+    oauth2Client.setCredentials(tokens);
 
     res.send({
       success: true,
@@ -46,3 +42,4 @@ export const redirectURI = async (req, res) => {
     });
   }
 };
+

@@ -7,7 +7,7 @@ import {
 const app = express.Router();
 
 // ROUTE - /google
-app.post("/google", googleAuth);
+app.get("/google", googleAuth);
 // ROUTE - /google/redirect
 app.get("/google/redirect", redirectURI);
 

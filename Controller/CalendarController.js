@@ -1,13 +1,26 @@
 import dayjs from "dayjs";
 import { calendar, oauth2Client } from "../index.js";
 import { v4 as uuid } from "uuid";
+import { google } from "googleapis";
 
 // Create Events
 export const CreateEvents = async (req, res) => {
   try {
-    await calendar.events.insert({
+    const accessToken = req.cookies.accessToken; // Retrieve access token from cookies
+    if (!accessToken) {
+      return res.status(401).json({
+        success: false,
+        message: "Access token not found in cookies",
+      });
+    }
+
+    const oauth2Client = new google.auth.OAuth2();
+    oauth2Client.setCredentials({ access_token: accessToken });
+
+    const calendarClient = google.calendar({ version: 'v3', auth: oauth2Client });
+    
+    await calendarClient.events.insert({
       calendarId: "primary",
-      auth: oauth2Client,
       requestBody: {
         summary: "This Is A Test Event",
         description: "Created By Ashish - Node JS",
