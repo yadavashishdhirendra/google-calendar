@@ -1,11 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from 'cors'
 import { google } from "googleapis";
 dotenv.config();
 
 const app = express();
 
 const PORT = 8000;
+
+app.use(cors())
 
 // oAuth Secret
 export const oauth2Client = new google.auth.OAuth2(
