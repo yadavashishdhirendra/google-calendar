@@ -10,7 +10,7 @@ import {
 const app = express.Router();
 
 // ROUTE - /create-events
-app.get("/create-events", CreateEvents);
+app.post("/create-events", CreateEvents);
 // ROUTE - /events
 app.get("/events", AllEvents);
 // ROUTE - /update-events/:id
