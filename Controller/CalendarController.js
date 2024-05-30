@@ -8,6 +8,7 @@ export const CreateEvents = async (req, res) => {
     const { title, description, startdateTime, endDateTime, attendees } = req.body
 
     await calendar.events.insert({
+      auth: oauth2Client,
       calendarId: "primary",
       requestBody: {
         summary: title,
