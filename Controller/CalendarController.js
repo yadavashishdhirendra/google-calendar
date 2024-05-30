@@ -7,14 +7,6 @@ export const CreateEvents = async (req, res) => {
   try {
     const { title, description, startdateTime, endDateTime, attendees } = req.body
 
-    const hangoutLink = await calendar.conferences.create({
-      requestId: "",
-      requestBody: {
-        requestId: "",
-        conferenceSolutionKey: { type: 'hangoutsMeet' }
-      }
-    })
-
     await calendar.events.insert({
       auth: oauth2Client,
       calendarId: "primary",
@@ -33,16 +25,9 @@ export const CreateEvents = async (req, res) => {
           createRequest: {
             requestId: uuid(),
           },
-          entryPoints: [
-            {
-              entryPointType: 'video',
-              uri: hangoutLink.data.entryPoints[0].uri
-            }
-          ]
         },
-        conferenceSolution: { key: { type: "hangoutsMeet" } },
         attendees: attendees,
-        hangoutLink: "https://meet.google.com/zyu-ywhh-ckz",
+        // hangoutLink: "https://meet.google.com/zyu-ywhh-ckz",
       },
     });
 
@@ -124,7 +109,7 @@ export const UpdateEventById = async (req, res) => {
           },
         },
         attendees: attendees,
-        hangoutLink: "https://meet.google.com/zyu-ywhh-ckz",
+        // hangoutLink: "https://meet.google.com/zyu-ywhh-ckz",
       },
     }
     const eventId = req.params.id;
