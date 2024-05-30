@@ -63,34 +63,12 @@ export const AllEvents = async (req, res) => {
 // Update The Events
 export const UpdateEventById = async (req, res) => {
   try {
-    // const requestBody = {
-    //   summary: "This Is A Test Event",
-    //   description: "Created By Ashish - Node JS Updated",
-    //   start: {
-    //     dateTime: dayjs(new Date()).add(1, "day").toISOString(),
-    //     timeZone: "Asia/Kolkata",
-    //   },
-    //   end: {
-    //     dateTime: dayjs(new Date()).add(1, "day").add(1, "hour").toISOString(),
-    //     timeZone: "Asia/Kolkata",
-    //   },
-    //   conferenceData: {
-    //     createRequest: {
-    //       requestId: uuid(),
-    //     },
-    //   },
-    //   attendees: [
-    //     {
-    //       email: "ashish.yadav@menrocks.in",
-    //     },
-    //   ],
-    // };
-
+    const eventId = req.params.id;
     const { title, description, startdateTime, endDateTime, attendees } = req.body
 
-
-    const requestBody = {
+    await calendar.events.update({
       auth: oauth2Client,
+      eventId: eventId,
       calendarId: "primary",
       requestBody: {
         summary: title,
@@ -111,16 +89,12 @@ export const UpdateEventById = async (req, res) => {
         attendees: attendees,
         // hangoutLink: "https://meet.google.com/zyu-ywhh-ckz",
       },
-    }
-    const eventId = req.params.id;
-    let events = await calendar.events.update({
-      calendarId: "primary",
-      auth: oauth2Client,
-      eventId: eventId,
-      requestBody: requestBody,
     });
 
-    res.send({ events: events });
+    return res.status(200).json({
+      success: true,
+      message: "Event Updated Successfully"
+    })
   } catch (error) {
     return res.status(500).json({
       success: false,
