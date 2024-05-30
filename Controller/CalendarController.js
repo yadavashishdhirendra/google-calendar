@@ -7,6 +7,14 @@ export const CreateEvents = async (req, res) => {
   try {
     const { title, description, startdateTime, endDateTime, attendees } = req.body
 
+    const hangoutLink = await calendar.conferences.create({
+      requestId: "",
+      requestBody: {
+        requestId: "",
+        conferenceSolutionKey: { type: 'hangoutsMeet' }
+      }
+    })
+
     await calendar.events.insert({
       auth: oauth2Client,
       calendarId: "primary",
@@ -25,7 +33,14 @@ export const CreateEvents = async (req, res) => {
           createRequest: {
             requestId: uuid(),
           },
+          entryPoints: [
+            {
+              entryPointType: 'video',
+              uri: hangoutLink.data.entryPoints[0].uri
+            }
+          ]
         },
+        conferenceSolution: { key: { type: "hangoutsMeet" } },
         attendees: attendees,
         hangoutLink: "https://meet.google.com/zyu-ywhh-ckz",
       },
@@ -63,28 +78,55 @@ export const AllEvents = async (req, res) => {
 // Update The Events
 export const UpdateEventById = async (req, res) => {
   try {
+    // const requestBody = {
+    //   summary: "This Is A Test Event",
+    //   description: "Created By Ashish - Node JS Updated",
+    //   start: {
+    //     dateTime: dayjs(new Date()).add(1, "day").toISOString(),
+    //     timeZone: "Asia/Kolkata",
+    //   },
+    //   end: {
+    //     dateTime: dayjs(new Date()).add(1, "day").add(1, "hour").toISOString(),
+    //     timeZone: "Asia/Kolkata",
+    //   },
+    //   conferenceData: {
+    //     createRequest: {
+    //       requestId: uuid(),
+    //     },
+    //   },
+    //   attendees: [
+    //     {
+    //       email: "ashish.yadav@menrocks.in",
+    //     },
+    //   ],
+    // };
+
+    const { title, description, startdateTime, endDateTime, attendees } = req.body
+
+
     const requestBody = {
-      summary: "This Is A Test Event",
-      description: "Created By Ashish - Node JS Updated",
-      start: {
-        dateTime: dayjs(new Date()).add(1, "day").toISOString(),
-        timeZone: "Asia/Kolkata",
-      },
-      end: {
-        dateTime: dayjs(new Date()).add(1, "day").add(1, "hour").toISOString(),
-        timeZone: "Asia/Kolkata",
-      },
-      conferenceData: {
-        createRequest: {
-          requestId: uuid(),
+      auth: oauth2Client,
+      calendarId: "primary",
+      requestBody: {
+        summary: title,
+        description: description,
+        start: {
+          dateTime: startdateTime,
+          timeZone: "Asia/Kolkata",
         },
-      },
-      attendees: [
-        {
-          email: "ashish.yadav@menrocks.in",
+        end: {
+          dateTime: endDateTime,
+          timeZone: "Asia/Kolkata",
         },
-      ],
-    };
+        conferenceData: {
+          createRequest: {
+            requestId: uuid(),
+          },
+        },
+        attendees: attendees,
+        hangoutLink: "https://meet.google.com/zyu-ywhh-ckz",
+      },
+    }
     const eventId = req.params.id;
     let events = await calendar.events.update({
       calendarId: "primary",
